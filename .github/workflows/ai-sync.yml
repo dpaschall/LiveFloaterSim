@@ -1,21 +1,45 @@
-- name: Fetch and unzip AI sync payload
-  run: |
-    mkdir -p tmp_sync && cd tmp_sync
+name: AI Sync Push
 
-    echo ">>> Downloading ZIP"
-    curl -L -f -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip" || { echo "Download failed"; exit 9; }
+on:
+  workflow_dispatch:
 
-    echo ">>> Contents of ZIP (pre-unzip)"
-    unzip -l ai_update.zip || { echo "Unzip failed (header check)"; exit 9; }
+jobs:
+  sync:
+    runs-on: ubuntu-latest
 
-    echo ">>> Unzipping"
-    unzip -q ai_update.zip || { echo "Unzip failed"; exit 9; }
+    steps:
+      - name: Checkout ai-sync branch
+        uses: actions/checkout@v3
+        with:
+          ref: ai-sync
 
-    echo ">>> Contents of unpacked directory:"
-    ls -l
+     - name: Fetch and unzip AI sync payload
+        run: |
+          mkdir -p tmp_sync && cd tmp_sync
+      
+          echo ">>> Downloading ZIP"
+          curl -L -f -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip" || { echo "Download failed"; exit 9; }
+      
+          echo ">>> Contents of ZIP (pre-unzip)"
+          unzip -l ai_update.zip || { echo "Unzip failed (header check)"; exit 9; }
+      
+          echo ">>> Unzipping"
+          unzip -q ai_update.zip || { echo "Unzip failed"; exit 9; }
+      
+          echo ">>> Contents of unpacked directory:"
+          ls -l
+      
+          echo ">>> Copying files to repo root..."
+          cp -rv * ../ || { echo "Copy failed"; exit 9; }
+      
+          cd ..
+          rm -rf tmp_sync
 
-    echo ">>> Copying files to repo root..."
-    cp -rv * ../ || { echo "Copy failed"; exit 9; }
-
-    cd ..
-    rm -rf tmp_sync
+      - name: Commit and push changes
+        run: |
+          git config user.name "ChatGPT Sync Bot"
+          git config user.email "dpaschall+bot@users.noreply.github.com"
+          git add .
+          git diff --quiet && echo "No changes" && exit 0
+          git commit -m "AI sync update $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin ai-sync
