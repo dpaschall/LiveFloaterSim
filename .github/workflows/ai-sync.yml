@@ -1,0 +1,28 @@
+name: AI Sync Push
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Pull and unpack latest AI-generated ZIP (manual step for now)
+        run: |
+          mkdir update && cd update
+          curl -L -o ai_update.zip "<PROVIDED_ZIP_URL>"
+          unzip ai_update.zip
+          cp -r * ../
+
+      - name: Commit and push changes to ai-sync
+        run: |
+          git config user.name "ChatGPT AI Sync"
+          git config user.email "dpaschall+ai@users.noreply.github.com"
+          git checkout ai-sync
+          git add .
+          git commit -m "AI sync update $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push origin ai-sync
+        env:
+          GH_PUSH_TOKEN: ${{ secrets.GH_PUSH_TOKEN }}
