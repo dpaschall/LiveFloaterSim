@@ -1,0 +1,8 @@
+numpy
+scipy
+sympy
+matplotlib
+ipympl
+ipywidgets
+pandas
+ffmpeg-python
