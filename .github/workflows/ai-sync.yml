@@ -1,31 +1,21 @@
-name: AI Sync Push
+- name: Fetch and unzip AI sync payload
+  run: |
+    mkdir -p tmp_sync && cd tmp_sync
 
-on:
-  workflow_dispatch:
+    echo ">>> Downloading ZIP"
+    curl -L -f -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip" || { echo "Download failed"; exit 9; }
 
-jobs:
-  sync:
-    runs-on: ubuntu-latest
+    echo ">>> Contents of ZIP (pre-unzip)"
+    unzip -l ai_update.zip || { echo "Unzip failed (header check)"; exit 9; }
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          ref: ai-sync
+    echo ">>> Unzipping"
+    unzip -q ai_update.zip || { echo "Unzip failed"; exit 9; }
 
-      - name: Pull and unpack latest AI-generated ZIP from ucareffect.org
-        run: |
-          mkdir tmp_sync && cd tmp_sync
-          curl -L -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip"
-          unzip ai_update.zip
-          cp -r * ../
-          cd ..
-          rm -rf tmp_sync
+    echo ">>> Contents of unpacked directory:"
+    ls -l
 
-      - name: Commit and push changes to ai-sync
-        run: |
-          git config user.name "ChatGPT Sync Bot"
-          git config user.email "dpaschall+bot@users.noreply.github.com"
-          git add .
-          git commit -m "AI sync update $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
-          git push origin ai-sync
+    echo ">>> Copying files to repo root..."
+    cp -rv * ../ || { echo "Copy failed"; exit 9; }
+
+    cd ..
+    rm -rf tmp_sync
