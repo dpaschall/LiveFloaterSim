@@ -25,3 +25,7 @@ Dummy simulation complete at Thu May  8 06:38:45 PM UTC 2025
 2025-05-08 19:16:07 [INFO] simulation: Running simulation with config: {'omega': 188.5, 'mB': 0.001}
 2025-05-08 19:16:07 [INFO] postprocess: Creating simulation animation.
 2025-05-08 19:16:07 [INFO] __main__: Log upload successful.
+2025-05-08 20:16:38 [ERROR] ipykernel.comm: No such comm target registered: jupyter.widget.control
+2025-05-08 20:16:38 [WARNING] Comm: No such comm: e6f97826-5270-4e84-ad35-96eef92693b8
+2025-05-08 20:24:04 [ERROR] ipykernel.comm: No such comm target registered: jupyter.widget.control
+2025-05-08 20:24:04 [WARNING] Comm: No such comm: f24af921-0b72-4bd2-bab3-c5d1e58a7ec3
