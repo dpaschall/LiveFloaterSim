@@ -3,8 +3,6 @@ import numpy as np
 import pickle
 import sympy as sp
 from scipy.integrate import solve_ivp
-import logging
-logger = logging.getLogger(__name__)
 
 # Paths
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -65,10 +63,3 @@ for th,ph,ps in zip(sol.y[0], sol.y[1], sol.y[2]):
     axis_vecs.append(R @ np.array([0,0,1]))
 axis_vecs = np.array(axis_vecs)
 np.savez(os.path.join(results_dir,'axis_vecs.npz'), axis=axis_vecs)
-
-import subprocess
-try:
-    subprocess.run(["bash", "../upload_log.sh"], check=True)
-except Exception as e:
-    logger.error(f"Log upload failed: {e}")
-    
