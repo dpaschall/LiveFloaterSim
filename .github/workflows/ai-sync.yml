@@ -3,10 +3,12 @@ name: AI Sync Push
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write   # 👈 required for pushing commits
+
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
