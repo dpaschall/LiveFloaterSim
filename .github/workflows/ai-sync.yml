@@ -8,24 +8,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout ai-sync branch
         uses: actions/checkout@v3
         with:
           ref: ai-sync
 
-      - name: Pull and unpack latest AI-generated ZIP from ucareffect.org
+      - name: Fetch latest ZIP from ucareffect.org
         run: |
-          mkdir tmp_sync && cd tmp_sync
-          curl -L -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip"
-          unzip ai_update.zip
-          cp -r * ../
-          cd ..
-          rm -rf tmp_sync
+          mkdir -p tmp_sync && cd tmp_sync
+          echo "Downloading ZIP..."
+          curl -L -f -o ai_update.zip "https://ucareffect.org/ai-sync-drop/latest.zip"
+          echo "Unzipping..."
+          unzip -q ai_update.zip || { echo "Unzip failed"; exit 1; }
+          echo "Contents:"
+          ls -lah
+          echo "Copying files to repo root..."
+          cp -rv * ../
+          cd .. && rm -rf tmp_sync
 
-      - name: Commit and push changes to ai-sync
+      - name: Commit and push changes
         run: |
           git config user.name "ChatGPT Sync Bot"
           git config user.email "dpaschall+bot@users.noreply.github.com"
           git add .
-          git commit -m "AI sync update $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
+          git diff --quiet && echo "No changes" && exit 0
+          git commit -m "AI sync update $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin ai-sync
+
