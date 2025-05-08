@@ -17,11 +17,3 @@ Dummy simulation complete at Thu May  8 06:38:45 PM UTC 2025
 2025-05-08 19:13:49 [INFO] simulation: Running simulation with config: {'omega': 188.5, 'mB': 0.001}
 2025-05-08 19:13:49 [INFO] postprocess: Creating simulation animation.
 2025-05-08 19:13:49 [INFO] __main__: Log upload successful.
-2025-05-08 19:16:07 [INFO] __main__: === Starting Main Simulator ===
-2025-05-08 19:16:07 [INFO] config: Loading configuration parameters.
-2025-05-08 19:16:07 [INFO] __main__: Loaded config: {'omega': 188.5, 'mB': 0.001}
-2025-05-08 19:16:07 [INFO] geometry: Generating geometry diagram.
-2025-05-08 19:16:07 [INFO] symbolic: Deriving symbolic equations of motion.
-2025-05-08 19:16:07 [INFO] simulation: Running simulation with config: {'omega': 188.5, 'mB': 0.001}
-2025-05-08 19:16:07 [INFO] postprocess: Creating simulation animation.
-2025-05-08 19:16:07 [INFO] __main__: Log upload successful.
